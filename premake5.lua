@@ -27,6 +27,6 @@ project "shell"
     links {"library"}
     location "tmp"
     if os.is("linux") then
-        links{"pthtread", "dl"}
+        links{"pthread", "dl"}
     end
 
