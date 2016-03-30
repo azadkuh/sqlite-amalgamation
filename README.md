@@ -15,15 +15,27 @@ This repository ships with two build generators (`cmake`, `premake5`). An static
 ### cmake
 to build by `cmake` in project source tree:
 ```bash
+
+# under Linux / OS X
 $> mkdir xbin
 $> cd xbin
 $> cmake ..
-
-# on Linux / OS X
 $> make
 
-# on Windows
+# under Windows
+$> mkdir xbin
+$> cd xbin
+$> cmake ..
 $> cmake --build . --config Release
+```
+
+by `gcc` and `clang` it's also possilbe to build `sqlite3` as a shared library by `cmake`:
+```bash
+# on gcc or clang (Linux or OS X)
+$> mkdir xbin
+$> cd xbin
+$> cmake .. -DBUILD_SHARED_LIBS=ON
+$> make
 ```
 
 ### premake5
