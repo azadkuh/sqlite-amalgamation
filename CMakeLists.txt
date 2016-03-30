@@ -3,25 +3,28 @@ cmake_minimum_required(VERSION 3.0)
 
 option(BUILD_SHARED_LIBS "build sqlite3 as a unix shared (so/dylib) library" OFF)
 
-if ( CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_C_COMPILER_ID MATCHES "GNU" )
+if(CMAKE_C_COMPILER_ID MATCHES ".*Clang" OR CMAKE_C_COMPILER_ID MATCHES "GNU")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g0 -Wall -Wextra -pedantic -Wcast-align -Wunused -Wno-unused-parameter")
-elseif ( CMAKE_C_COMPILER_ID MATCHES "MSVC" )
+elseif(CMAKE_C_COMPILER_ID MATCHES "MSVC")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nologo -Zc:wchar_t -FS -O2 -MD -Zc:strictStrings -W3")
     if (BUILD_SHARED_LIBS)
         message(SEND_ERROR "@error: shared lib is not supported under Visual Studio.\n please compile as a static lib.")
     endif()
 endif()
 
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    target_link_libraries(sqlite3_shell pthread dl)
-elseif( CMAKE_SYSTEM_NAME MATCHES "Darwin" AND BUILD_SHARED_LIBS)
-    message("@warning: rpath is skipped by default under OS X")
-    set(CMAKE_SKIP_RPATH TRUE)
-endif()
-
 add_library(sqlite3 sqlite3.c)
-
 add_executable(sqlite3_shell shell.c)
 target_link_libraries(sqlite3_shell sqlite3)
 set_target_properties(sqlite3_shell PROPERTIES OUTPUT_NAME sqlite3)
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    if(BUILD_SHARED_LIBS)
+        target_link_libraries(sqlite3 pthread dl)
+    else()
+        target_link_libraries(sqlite3_shell pthread dl)
+    endif()
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin" AND BUILD_SHARED_LIBS)
+    message("@warning: rpath is skipped by default under OS X")
+    set(CMAKE_SKIP_RPATH TRUE)
+endif()
 
