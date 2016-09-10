@@ -9,14 +9,19 @@ if(MSVC)
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES ".*Clang" OR CMAKE_C_COMPILER_ID MATCHES "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g0 -Wall -Wextra -pedantic -Wcast-align -Wunused -Wno-unused-parameter")
-elseif(CMAKE_C_COMPILER_ID MATCHES "MSVC")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nologo -Zc:wchar_t -FS -O2 -Zc:strictStrings -W3")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3 -g0 -Wall -Wextra -pedantic \
+        -Wcast-align -Wunused -Wno-unused-parameter")
+elseif(MSVC)
+    set(CMAKE_C_FLAGS_RELEASE "-nologo -Zc:wchar_t -FS -O2 -MT -Zc:strictStrings -W3")
 	if(BUILD_MT_RELEASE)
-        string(REPLACE "-MD" "-MT" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        string(REPLACE "-MD" "-MT" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 	endif()
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE
+            "${CMAKE_SHARED_LINKER_FLAGS_RELASE} \
+            /Gy /GF /OPT:REF /OPT:ICF")
     if(BUILD_SHARED_LIBS)
-        message(SEND_ERROR "@error: shared lib is not supported under Visual Studio.\n please compile as a static lib.")
+        message(SEND_ERROR "@error: shared lib is not supported under Visual Studio.\n \
+                please compile as a static lib.")
     endif()
 endif()
 
