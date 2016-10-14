@@ -40,21 +40,21 @@ $> cmake ..
 $> cmake --build . --config Release
 ```
 
-building the shell application is disabled by default, to make it enable:
+building of the shell application is disabled by default, to make it:
 ```bash
 $> cmake .. -DBUILD_SHELL=ON
 ```
 
-by `gcc` and `clang` it's also possible to build `sqlite3` as a shared library
+by `gcc` and `clang` it's also possible to build *sqlite3* as a shared library
 by `cmake`:
 ```bash
 # on gcc or clang (Linux or OS X)
 $> cmake .. -DBUILD_SHARED_LIBS=ON
 ```
 
-### SQLITE3 build options
-`SQLITE3` comes with a plenty of compile option, you can choose some of these
-options by `ccmake .` or `cmake-gui .`:
+### SQLite3 build options
+`SQLite` comes with a plenty of compile options, you can choose some of these
+options:
 
 - `BUILD_ENABLE_DBSTAT_VTAB`
 - `BUILD_ENABLE_FTS3`
@@ -64,6 +64,15 @@ options by `ccmake .` or `cmake-gui .`:
 - `BUILD_ENABLE_RBU`
 - `BUILD_ENABLE_RTREE`
 
+by:
+```bash
+# shell: Linux / OS X
+$> ccmake .
+
+# gui: Linux / OS X / Windows
+$> cmake-gui .
+```
+
 for more information please have a look at [Compilation Options For
-SQLITE](https://www.sqlite.org/compile.html)
+SQLite](https://www.sqlite.org/compile.html)
 
