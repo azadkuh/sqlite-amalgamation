@@ -1,8 +1,10 @@
 # sqlite-amalgamation
+- [Release History](https://www.sqlite.org/changes.html)
+- [Chronology](https://www.sqlite.org/chronology.html)
 
 This repository mirrors the [SQLite](http://www.sqlite.org/download.html)
-amalgamation, provided in order to be included in `git submodule` and other
-`git` based, custom dependency managers.
+amalgamation, provided in order to be included in `git submodule/subtree` or
+other `git` based, custom dependency managers.
 It also comes with a `cmake` build script to easily make the library and the shell
 application.
 
@@ -37,7 +39,7 @@ $> make -j 2  # or ninja
 $> mkdir .build
 $> cd .build
 $> cmake ..
-$> cmake --build . --config Release
+$> cmake --build . --config Release -- /v:m
 ```
 
 building of the shell application is disabled by default, to make it:
