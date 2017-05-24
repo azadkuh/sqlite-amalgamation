@@ -27,9 +27,11 @@ if(IS_CLANG OR IS_GNUXX)
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -O3 -g0 -Wall -Wextra -pedantic \
         -Wcast-align -Wunused -Wno-unused-parameter")
 elseif(MSVC)
-    set(CMAKE_C_FLAGS_RELEASE "-nologo -Zc:wchar_t -FS -O2 -MT -Zc:strictStrings -W3")
+    set(CMAKE_C_FLAGS_RELEASE "-nologo -Zc:wchar_t -FS -O2 -MD -Zc:strictStrings -W3")
+    set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG} -MDd")
 	if(BUILD_MT_RELEASE)
-        string(REPLACE "-MD" "-MT" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+        string(REPLACE "-MD"  "-MT"  CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+        string(REPLACE "-MDd" "-MTd" CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG}")
 	endif()
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE
             "${CMAKE_SHARED_LINKER_FLAGS_RELASE} \
