@@ -7,8 +7,10 @@ project(sqlite3
 # sqlite3 compile options, modules, ...
 option(BUILD_ENABLE_DBSTAT_VTAB "enables dbstat virtual table"                 OFF)
 option(BUILD_ENABLE_FTS3        "enables full text searches version 3"         OFF)
+option(BUILD_ENABLE_FTS4        "enables full text searches version 3 & 4"     OFF)
 option(BUILD_ENABLE_FTS5        "enables full text searches version 5"         OFF)
-option(BUILD_ENABLE_ICU         "enables international components fir unicode" OFF)
+option(BUILD_ENABLE_GEOPOLY     "enables Geopoly extention"                    OFF)
+option(BUILD_ENABLE_ICU         "enables international components for unicode" OFF)
 option(BUILD_ENABLE_JSON1       "enables JSON SQL functins"                    ON)
 option(BUILD_ENABLE_RBU         "enables resumable bulk update extension"      OFF)
 option(BUILD_ENABLE_RTREE       "enables R*TRee index extension"               OFF)
@@ -59,7 +61,9 @@ add_library(${PROJECT_NAME} sqlite3.c)
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<BOOL:${BUILD_ENABLE_DBSTAT_VTAB}>:SQLITE_ENABLE_DBSTAT_VTAB>
     $<$<BOOL:${BUILD_ENABLE_FTS3}>:SQLITE_ENABLE_FTS3>
+    $<$<BOOL:${BUILD_ENABLE_FTS4}>:SQLITE_ENABLE_FTS4>
     $<$<BOOL:${BUILD_ENABLE_FTS5}>:SQLITE_ENABLE_FTS5>
+    $<$<BOOL:${BUILD_ENABLE_GEOPOLY}>:SQLITE_ENABLE_GEOPOLY>
     $<$<BOOL:${BUILD_ENABLE_ICU}>:SQLITE_ENABLE_ICU>
     $<$<BOOL:${BUILD_ENABLE_JSON1}>:SQLITE_ENABLE_JSON1>
     $<$<BOOL:${BUILD_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
