@@ -17,8 +17,9 @@ option(BUILD_ENABLE_RTREE       "enables R*TRee index extension"               O
 
 
 # other build options
-option(BUILD_STATIC_RUNTIME "build by static c/c++ runtime"   ON)
-option(BUILD_SHELL          "build sqlite3 shell application" OFF)
+option(BUILD_RECOMMENDED_OPTS "build by recommended compile-time options" ON)
+option(BUILD_STATIC_RUNTIME   "build by static c/c++ runtime"             ON)
+option(BUILD_SHELL            "build sqlite3 shell application"           OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Release or Debug?" FORCE)
@@ -69,6 +70,17 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<BOOL:${BUILD_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
     $<$<BOOL:${BUILD_ENABLE_RTREE}>:SQLITE_ENABLE_RTREE>
     )
+if (BUILD_RECOMMENDED_OPTS)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC
+        SQLITE_DQS=0
+        SQLITE_DEFAULT_MEMSTATUS=0
+        SQLITE_LIKE_DOESNT_MATCH_BLOBS
+        SQLITE_MAX_EXPR_DEPTH=0
+        SQLITE_OMIT_DECLTYPE
+        SQLITE_OMIT_DEPRECATED
+        SQLITE_USE_ALLOCA
+        )
+endif()
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER sqlite3.h)
 make_target_build_options(${PROJECT_NAME})
