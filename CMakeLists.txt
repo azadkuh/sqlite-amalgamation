@@ -37,6 +37,15 @@ macro(make_target_build_options tgt)
         target_compile_definitions(${tgt} PUBLIC
             -DWIN32_LEAN_AND_MEAN -DNOMINMAX -D_CRT_SECURE_NO_WARNINGS
             )
+        if(${CMAKE_SIZEOF_VOID_P} LESS 8)
+            # this is a 32bit windows
+            option(BUILD_WITH_XPSDK "build for old 32bit (WinXP/2003) targets" OFF)
+            if(BUILD_WITH_XPSDK)
+                target_compile_definitions(${tgt} PUBLIC
+                    -DSQLITE_OS_WINRT=0
+                    -D_WIN32_WINNT=0x0502 -DWINVER=0x0502)
+            endif()
+        endif()
     endif()
     if(${BUILD_STATIC_RUNTIME})
         if(MSVC)
