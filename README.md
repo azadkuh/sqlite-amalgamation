@@ -49,19 +49,42 @@ the include directory and link library will be automatically added to your targe
 
 
 ## SQLite3 build options
-`SQLite` comes with plenty of compile options:
+`SQLite` comes with plenty of
+[compile options](https://www.sqlite.org/compile.html)
 
-- `BUILD_ENABLE_DBSTAT_VTAB`
-- `BUILD_ENABLE_FTS3`
-- `BUILD_ENABLE_FTS5`
-- `BUILD_ENABLE_ICU`
-- `BUILD_ENABLE_JSON1` (enabled by default)
-- `BUILD_ENABLE_RBU`
-- `BUILD_ENABLE_RTREE`
+following cmake build options control some of those compile options:
+
+
+| options                    | default |
+| :--                        | :--     |
+| `BUILD_ENABLE_JSON1`       | on      |
+| `BUILD_ENABLE_DBSTAT_VTAB` | off     |
+| `BUILD_ENABLE_FTS3`        | off     |
+| `BUILD_ENABLE_FTS4`        | off     |
+| `BUILD_ENABLE_FTS5`        | off     |
+| `BUILD_ENABLE_GEOPOLY`     | off     |
+| `BUILD_ENABLE_ICU`         | off     |
+| `BUILD_ENABLE_RBU`         | off     |
+| `BUILD_ENABLE_RTREE`       | off     |
+
+these **recommended** compile options are also passed to the compiler by
+`BUILD_RECOMMENDED_OPTS` (on by default):
+
+| options                            |
+| :--                                |
+| SQLITE_DQS                     = 0 |
+| SQLITE_DEFAULT_MEMSTATUS       = 0 |
+| SQLITE_DEFAULT_WAL_SYNCHRONOUS = 1 |
+| SQLITE_MAX_EXPR_DEPTH          = 0 |
+| SQLITE_LIKE_DOESNT_MATCH_BLOBS     |
+| SQLITE_OMIT_DECLTYPE               |
+| SQLITE_OMIT_DEPRECATED             |
+| SQLITE_OMIT_PROGRESS_CALLBACK      |
+| SQLITE_OMIT_SHARED_CACHE           |
+| SQLITE_USE_ALLOCA                  |
+
 
 the sqlite3 shell (executable) is disabled by default, to build it just
 activate the `BUILD_SHELL` option.
 
-for more information please have a look at [Compilation Options For
-SQLite](https://www.sqlite.org/compile.html)
 
