@@ -38,18 +38,19 @@ $> make install
 ```
 
 ## usage
-to integrate this library into your project simply add these lines to your
+to integrate this library into your project simply add these lines to your project
 `cmake`:
 ```cmake
-find_package(Sqlite3)
-target_link_libraries(${PROJECT_NAME} sqlite3::sqlite3)
+find_package(SQLite3 REQUIRED CONFIG)
+target_link_libraries(${PROJECT_NAME} SQLite::SQLite3)
 ```
 
 the include directory and link library will be automatically added to your target.
-
+If you need to switch your project to use "standard" SQLite remove CONFIG option
+in `find_package` function call.
 
 ## SQLite3 build options
-`SQLite` comes with plenty of
+`SQLite3` comes with plenty of
 [compile options](https://www.sqlite.org/compile.html)
 
 following cmake build options control some of those compile options:
@@ -84,7 +85,7 @@ these **recommended** compile options are also passed to the compiler by
 | SQLITE_USE_ALLOCA                  |
 
 
-the sqlite3 shell (executable) is disabled by default, to build it just
+the SQLite3 shell (executable) is disabled by default, to build it just
 activate the `BUILD_SHELL` option.
 
 

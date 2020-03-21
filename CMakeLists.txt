@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
-project(sqlite3
-    VERSION 3
+project(SQLite3
+    VERSION 3.31.1
     LANGUAGES C
     )
 
-# sqlite3 compile options, modules, ...
+# SQLite3 compile options, modules, ...
 option(BUILD_ENABLE_DBSTAT_VTAB "enables dbstat virtual table"                 OFF)
 option(BUILD_ENABLE_FTS3        "enables full text searches version 3"         OFF)
 option(BUILD_ENABLE_FTS4        "enables full text searches version 3 & 4"     OFF)
@@ -19,7 +19,7 @@ option(BUILD_ENABLE_RTREE       "enables R*TRee index extension"               O
 # other build options
 option(BUILD_RECOMMENDED_OPTS "build by recommended compile-time options" ON)
 option(BUILD_STATIC_RUNTIME   "build by static c/c++ runtime"             ON)
-option(BUILD_SHELL            "build sqlite3 shell application"           OFF)
+option(BUILD_SHELL            "build SQLite3 shell application"           OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Release or Debug?" FORCE)
@@ -94,24 +94,25 @@ if (BUILD_RECOMMENDED_OPTS)
         )
 endif()
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER sqlite3.h)
-make_target_build_options(${PROJECT_NAME})
-add_library(sqlite3::sqlite3 ALIAS ${PROJECT_NAME})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    OUTPUT_NAME   sqlite3
+    PUBLIC_HEADER sqlite3.h
+    DEBUG_POSTFIX d
+    )
 
-install(TARGETS ${PROJECT_NAME} EXPORT Sqlite3Config
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
     ARCHIVE       DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY       DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sqlite3
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
-install(EXPORT Sqlite3Config
-    NAMESPACE sqlite3::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+install(EXPORT  ${PROJECT_NAME}Config
+    NAMESPACE   SQLite::
+    DESTINATION cmake
     )
-export(TARGETS ${PROJECT_NAME} FILE Sqlite3Config.cmake)
 
 if (BUILD_SHELL)
     add_executable(sqlite3_shell shell.c)
     set_target_properties(sqlite3_shell PROPERTIES OUTPUT_NAME sqlite3)
-    target_link_libraries(sqlite3_shell PRIVATE sqlite3::sqlite3)
+    target_link_libraries(sqlite3_shell PRIVATE ${PROJECT_NAME})
     install(TARGETS sqlite3_shell RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
