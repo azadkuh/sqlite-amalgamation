@@ -55,21 +55,20 @@ in `find_package` function call.
 
 following cmake build options control some of those compile options:
 
-
-| options                    | default |
-| :--                        | :--     |
-| `BUILD_ENABLE_JSON1`       | on      |
-| `BUILD_ENABLE_DBSTAT_VTAB` | off     |
-| `BUILD_ENABLE_FTS3`        | off     |
-| `BUILD_ENABLE_FTS4`        | off     |
-| `BUILD_ENABLE_FTS5`        | off     |
-| `BUILD_ENABLE_GEOPOLY`     | off     |
-| `BUILD_ENABLE_ICU`         | off     |
-| `BUILD_ENABLE_RBU`         | off     |
-| `BUILD_ENABLE_RTREE`       | off     |
+| options                     | default |
+| :--                         | :--     |
+| `SQLITE_ENABLE_JSON1`       | on      |
+| `SQLITE_ENABLE_DBSTAT_VTAB` | off     |
+| `SQLITE_ENABLE_FTS3`        | off     |
+| `SQLITE_ENABLE_FTS4`        | off     |
+| `SQLITE_ENABLE_FTS5`        | off     |
+| `SQLITE_ENABLE_GEOPOLY`     | off     |
+| `SQLITE_ENABLE_ICU`         | off     |
+| `SQLITE_ENABLE_RBU`         | off     |
+| `SQLITE_ENABLE_RTREE`       | off     |
 
 these **recommended** compile options are also passed to the compiler by
-`BUILD_RECOMMENDED_OPTS` (on by default):
+`SQLITE_RECOMMENDED_OPTIONS` (on by default):
 
 | options                            |
 | :--                                |
@@ -84,6 +83,8 @@ these **recommended** compile options are also passed to the compiler by
 | SQLITE_OMIT_SHARED_CACHE           |
 | SQLITE_USE_ALLOCA                  |
 
+all compile-time options will go into `sqlite3_config.h`, you may
+use this file to check these options when building your application.
 
 the SQLite3 shell (executable) is disabled by default, to build it just
 activate the `BUILD_SHELL` option.

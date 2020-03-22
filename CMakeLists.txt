@@ -1,104 +1,81 @@
 cmake_minimum_required(VERSION 3.8)
 project(SQLite3
-    VERSION 3.31.1
+    VERSION   3.31.1
     LANGUAGES C
     )
 
-# SQLite3 compile options, modules, ...
-option(BUILD_ENABLE_DBSTAT_VTAB "enables dbstat virtual table"                 OFF)
-option(BUILD_ENABLE_FTS3        "enables full text searches version 3"         OFF)
-option(BUILD_ENABLE_FTS4        "enables full text searches version 3 & 4"     OFF)
-option(BUILD_ENABLE_FTS5        "enables full text searches version 5"         OFF)
-option(BUILD_ENABLE_GEOPOLY     "enables Geopoly extention"                    OFF)
-option(BUILD_ENABLE_ICU         "enables international components for unicode" OFF)
-option(BUILD_ENABLE_JSON1       "enables JSON SQL functins"                    ON)
-option(BUILD_ENABLE_RBU         "enables resumable bulk update extension"      OFF)
-option(BUILD_ENABLE_RTREE       "enables R*TRee index extension"               OFF)
+include(GNUInstallDirs)
 
-
-# other build options
-option(BUILD_RECOMMENDED_OPTS "build by recommended compile-time options" ON)
-option(BUILD_STATIC_RUNTIME   "build by static c/c++ runtime"             ON)
-option(BUILD_SHELL            "build SQLite3 shell application"           OFF)
+#------------------------------------------------------------------------------
+# build options and optional modules:
+option(SQLITE_ENABLE_DBSTAT_VTAB  "enables dbstat virtual table"                 OFF)
+option(SQLITE_ENABLE_FTS3         "enables full text searches version 3"         OFF)
+option(SQLITE_ENABLE_FTS4         "enables full text searches version 3 & 4"     OFF)
+option(SQLITE_ENABLE_FTS5         "enables full text searches version 5"         OFF)
+option(SQLITE_ENABLE_GEOPOLY      "enables Geopoly extention"                    OFF)
+option(SQLITE_ENABLE_ICU          "enables international components for unicode" OFF)
+option(SQLITE_ENABLE_JSON1        "enables JSON SQL functins"                    ON)
+option(SQLITE_ENABLE_RBU          "enables resumable bulk update extension"      OFF)
+option(SQLITE_ENABLE_RTREE        "enables R*TRee index extension"               OFF)
+option(SQLITE_RECOMMENDED_OPTIONS "compile by SQLite3 recommended options"       ON)
 
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Release or Debug?" FORCE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Release or Debug?" FORCE)
 endif()
-#------------------------------------------------------------------------------
-
-macro(make_target_build_options tgt)
-    target_compile_options(${tgt} PRIVATE
-        $<IF:$<C_COMPILER_ID:MSVC>,-W3,-Wall -Wextra -pedantic>
-        )
-    if(UNIX)
-        find_package(Threads REQUIRED)
-        target_link_libraries(${tgt} PUBLIC Threads::Threads ${CMAKE_DL_LIBS})
-    elseif(WIN32)
-        target_compile_definitions(${tgt} PUBLIC
-            -DWIN32_LEAN_AND_MEAN -DNOMINMAX -D_CRT_SECURE_NO_WARNINGS
-            )
-        if(${CMAKE_SIZEOF_VOID_P} LESS 8)
-            # this is a 32bit windows
-            option(BUILD_WITH_XPSDK "build for old 32bit (WinXP/2003) targets" OFF)
-            if(BUILD_WITH_XPSDK)
-                target_compile_definitions(${tgt} PUBLIC
-                    -DSQLITE_OS_WINRT=0
-                    -D_WIN32_WINNT=0x0502 -DWINVER=0x0502)
-            endif()
-        endif()
-    endif()
-    if(${BUILD_STATIC_RUNTIME})
-        if(MSVC)
-            foreach(flag CMAKE_C_FLAGS CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_DEBUG)
-                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-                set(${flag} "${${flag}}" CACHE STRING "msvc flags" FORCE)
-            endforeach()
-            target_compile_options(${tgt} PUBLIC
-                "$<$<CONFIG:Release>:-MT>"
-                "$<$<CONFIG:Debug>:-MTd>"
-                )
-        elseif(${CMAKE_C_COMPILER_ID} STREQUAL "GNU")
-            set_target_properties(${tgt} PROPERTIES LINK_FLAGS "-s -static-libgcc")
-        endif()
-    endif()
-endmacro()
 
 #------------------------------------------------------------------------------
-include(GNUInstallDirs)
-#------------------------------------------------------------------------------
 
-add_library(${PROJECT_NAME} sqlite3.c)
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-    $<$<BOOL:${BUILD_ENABLE_DBSTAT_VTAB}>:SQLITE_ENABLE_DBSTAT_VTAB>
-    $<$<BOOL:${BUILD_ENABLE_FTS3}>:SQLITE_ENABLE_FTS3>
-    $<$<BOOL:${BUILD_ENABLE_FTS4}>:SQLITE_ENABLE_FTS4>
-    $<$<BOOL:${BUILD_ENABLE_FTS5}>:SQLITE_ENABLE_FTS5>
-    $<$<BOOL:${BUILD_ENABLE_GEOPOLY}>:SQLITE_ENABLE_GEOPOLY>
-    $<$<BOOL:${BUILD_ENABLE_ICU}>:SQLITE_ENABLE_ICU>
-    $<$<BOOL:${BUILD_ENABLE_JSON1}>:SQLITE_ENABLE_JSON1>
-    $<$<BOOL:${BUILD_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
-    $<$<BOOL:${BUILD_ENABLE_RTREE}>:SQLITE_ENABLE_RTREE>
-    )
-if (BUILD_RECOMMENDED_OPTS)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC
-        SQLITE_DQS=0
-        SQLITE_DEFAULT_MEMSTATUS=0
-        SQLITE_DEFAULT_WAL_SYNCHRONOUS=1
-        SQLITE_LIKE_DOESNT_MATCH_BLOBS
-        SQLITE_MAX_EXPR_DEPTH=0
-        SQLITE_OMIT_DECLTYPE
-        SQLITE_OMIT_DEPRECATED
-        SQLITE_OMIT_PROGRESS_CALLBACK
-        SQLITE_OMIT_SHARED_CACHE
-        SQLITE_USE_ALLOCA
-        )
-endif()
-target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
+# SQLite3 as static library:
+add_library(${PROJECT_NAME} STATIC sqlite3.c)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     OUTPUT_NAME   sqlite3
     PUBLIC_HEADER sqlite3.h
     DEBUG_POSTFIX d
     )
+target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
+target_compile_definitions(${PROJECT_NAME} PUBLIC # inject user's options
+    $<BUILD_INTERFACE:
+        $<$<BOOL:${SQLITE_ENABLE_DBSTAT_VTAB}>:SQLITE_ENABLE_DBSTAT_VTAB>
+        $<$<BOOL:${SQLITE_ENABLE_FTS3}>:SQLITE_ENABLE_FTS3>
+        $<$<BOOL:${SQLITE_ENABLE_FTS4}>:SQLITE_ENABLE_FTS4>
+        $<$<BOOL:${SQLITE_ENABLE_FTS5}>:SQLITE_ENABLE_FTS5>
+        $<$<BOOL:${SQLITE_ENABLE_GEOPOLY}>:SQLITE_ENABLE_GEOPOLY>
+        $<$<BOOL:${SQLITE_ENABLE_ICU}>:SQLITE_ENABLE_ICU>
+        $<$<BOOL:${SQLITE_ENABLE_JSON1}>:SQLITE_ENABLE_JSON1>
+        $<$<BOOL:${SQLITE_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
+        $<$<BOOL:${SQLITE_ENABLE_RTREE}>:SQLITE_ENABLE_RTREE>
+        $<$<BOOL:${SQLITE_RECOMMENDED_OPTIONS}>:
+            SQLITE_DQS=0
+            SQLITE_DEFAULT_MEMSTATUS=0
+            SQLITE_DEFAULT_WAL_SYNCHRONOUS=1
+            SQLITE_LIKE_DOESNT_MATCH_BLOBS
+            SQLITE_MAX_EXPR_DEPTH=0
+            SQLITE_OMIT_DECLTYPE
+            SQLITE_OMIT_DEPRECATED
+            SQLITE_OMIT_PROGRESS_CALLBACK
+            SQLITE_OMIT_SHARED_CACHE
+            SQLITE_USE_ALLOCA
+        >
+    >
+    )
+
+# platform/compiler specific settings
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
+    find_package(Threads REQUIRED)
+    target_link_libraries(${PROJECT_NAME} INTERFACE Threads::Threads ${CMAKE_DL_LIBS})
+elseif(WIN32 AND ${CMAKE_SIZEOF_VOID_P} LESS 8) # this is a 32bit windows
+    option(BUILD_WITH_XPSDK "build for old 32bit (WinXP/2003) targets" OFF)
+    if(BUILD_WITH_XPSDK)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC
+            $<BUILD_INTERFACE:
+                -DSQLITE_OS_WINRT=0 -D_WIN32_WINNT=0x0502 -DWINVER=0x0502
+            >
+            )
+    endif()
+endif()
+
+#------------------------------------------------------------------------------
+configure_file(sqlite3_config.h.in ${CMAKE_BINARY_DIR}/sqlite3_config.h)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
     ARCHIVE       DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -109,10 +86,30 @@ install(EXPORT  ${PROJECT_NAME}Config
     NAMESPACE   SQLite::
     DESTINATION cmake
     )
+install(FILES
+    ${CMAKE_BINARY_DIR}/sqlite3_config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
 
-if (BUILD_SHELL)
-    add_executable(sqlite3_shell shell.c)
-    set_target_properties(sqlite3_shell PROPERTIES OUTPUT_NAME sqlite3)
-    target_link_libraries(sqlite3_shell PRIVATE ${PROJECT_NAME})
-    install(TARGETS sqlite3_shell RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+#------------------------------------------------------------------------------
+# SQLite3 shell application:
+option(BUILD_SHELL "build SQLite3 shell application" OFF)
+if(BUILD_SHELL)
+    add_executable(shell_app shell.c)
+    set_target_properties(shell_app PROPERTIES OUTPUT_NAME sqlite3)
+    target_link_libraries(shell_app PRIVATE ${PROJECT_NAME})
+    if(UNIX)
+    elseif(MSVC)
+        option(BUILD_SHELL_STATIC "build shell by static c/c++ runtime" ON)
+        foreach(flag CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_DEBUG)
+            if(BUILD_SHELL_STATIC)
+                string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+            else()
+                string(REGEX REPLACE "/MT" "/MD" ${flag} "${${flag}}")
+            endif()
+            set(${flag} "${${flag}}" CACHE STRING "msvc flags" FORCE)
+        endforeach()
+    endif()
+    install(TARGETS shell_app
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )
 endif()
