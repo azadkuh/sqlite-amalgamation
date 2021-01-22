@@ -14,7 +14,7 @@ option(SQLITE_ENABLE_FTS4         "enables full text searches version 3 & 4"    
 option(SQLITE_ENABLE_FTS5         "enables full text searches version 5"         OFF)
 option(SQLITE_ENABLE_GEOPOLY      "enables Geopoly extention"                    OFF)
 option(SQLITE_ENABLE_ICU          "enables international components for unicode" OFF)
-option(SQLITE_ENABLE_JSON1        "enables JSON SQL functins"                    ON)
+option(SQLITE_ENABLE_JSON1        "enables JSON SQL functions"                   ON)
 option(SQLITE_ENABLE_RBU          "enables resumable bulk update extension"      OFF)
 option(SQLITE_ENABLE_RTREE        "enables R*TRee index extension"               OFF)
 option(SQLITE_RECOMMENDED_OPTIONS "compile by SQLite3 recommended options"       ON)
