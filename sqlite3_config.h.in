@@ -16,6 +16,8 @@
 #cmakedefine SQLITE_ENABLE_JSON1
 #cmakedefine SQLITE_ENABLE_RBU
 #cmakedefine SQLITE_ENABLE_RTREE
+#cmakedefine SQLITE_ENABLE_STAT4
+#cmakedefine SQLITE_USE_URI
 
 #cmakedefine SQLITE_RECOMMENDED_OPTIONS
 #if defined(SQLITE_RECOMMENDED_OPTIONS)
