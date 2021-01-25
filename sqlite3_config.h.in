@@ -1,4 +1,4 @@
-/* the compile-time options used to build SQLite3 library
+/* the compile-time options used to build the SQLite3 library
  *
  * https://github.com/azadkuh/sqlite-amalgamation
  */
@@ -19,11 +19,11 @@
 
 #cmakedefine SQLITE_RECOMMENDED_OPTIONS
 #if defined(SQLITE_RECOMMENDED_OPTIONS)
-#   define SQLITE_DQS=0
-#   define SQLITE_DEFAULT_MEMSTATUS=0
-#   define SQLITE_DEFAULT_WAL_SYNCHRONOUS=1
+#   define SQLITE_DQS 0
+#   define SQLITE_DEFAULT_MEMSTATUS 0
+#   define SQLITE_DEFAULT_WAL_SYNCHRONOUS 1
 #   define SQLITE_LIKE_DOESNT_MATCH_BLOBS
-#   define SQLITE_MAX_EXPR_DEPTH=0
+#   define SQLITE_MAX_EXPR_DEPTH 1
 #   define SQLITE_OMIT_DECLTYPE
 #   define SQLITE_OMIT_DEPRECATED
 #   define SQLITE_OMIT_PROGRESS_CALLBACK
