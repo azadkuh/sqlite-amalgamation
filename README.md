@@ -55,17 +55,21 @@ in `find_package` function call.
 
 following cmake build options control some of those compile options:
 
-| options                     | default |
-| :--                         | :--     |
-| `SQLITE_ENABLE_JSON1`       | on      |
-| `SQLITE_ENABLE_DBSTAT_VTAB` | off     |
-| `SQLITE_ENABLE_FTS3`        | off     |
-| `SQLITE_ENABLE_FTS4`        | off     |
-| `SQLITE_ENABLE_FTS5`        | off     |
-| `SQLITE_ENABLE_GEOPOLY`     | off     |
-| `SQLITE_ENABLE_ICU`         | off     |
-| `SQLITE_ENABLE_RBU`         | off     |
-| `SQLITE_ENABLE_RTREE`       | off     |
+| options                        | default |
+| :--                            | :--     |
+| `SQLITE_ENABLE_JSON1`          | on      |
+| `SQLITE_ENABLE_MATH_FUNCTIONS` | on      |
+| `SQLITE_ENABLE_DBSTAT_VTAB`    | off     |
+| `SQLITE_ENABLE_FTS3`           | off     |
+| `SQLITE_ENABLE_FTS4`           | off     |
+| `SQLITE_ENABLE_FTS5`           | off     |
+| `SQLITE_ENABLE_GEOPOLY`        | off     |
+| `SQLITE_ENABLE_ICU`            | off     |
+| `SQLITE_ENABLE_RBU`            | off     |
+| `SQLITE_ENABLE_RTREE`          | off     |
+| `SQLITE_ENABLE_STAT4`          | off     |
+| `SQLITE_USE_URI`               | off     |
+
 
 these **recommended** compile options are also passed to the compiler by
 `SQLITE_RECOMMENDED_OPTIONS` (on by default):
