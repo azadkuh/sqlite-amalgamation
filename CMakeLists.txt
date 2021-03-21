@@ -8,18 +8,19 @@ include(GNUInstallDirs)
 
 #------------------------------------------------------------------------------
 # build options and optional modules:
-option(SQLITE_ENABLE_DBSTAT_VTAB  "enables dbstat virtual table"                    OFF)
-option(SQLITE_ENABLE_FTS3         "enables full text searches version 3"            OFF)
-option(SQLITE_ENABLE_FTS4         "enables full text searches version 3 & 4"        OFF)
-option(SQLITE_ENABLE_FTS5         "enables full text searches version 5"            OFF)
-option(SQLITE_ENABLE_GEOPOLY      "enables Geopoly extention"                       OFF)
-option(SQLITE_ENABLE_ICU          "enables international components for unicode"    OFF)
-option(SQLITE_ENABLE_JSON1        "enables JSON SQL functions"                      ON)
-option(SQLITE_ENABLE_RBU          "enables resumable bulk update extension"         OFF)
-option(SQLITE_ENABLE_RTREE        "enables R*TRee index extension"                  OFF)
-option(SQLITE_ENABLE_STAT4        "enhances query planner under certain situations" OFF)
-option(SQLITE_USE_URI             "enables the default URI filename processing"     OFF)
-option(SQLITE_RECOMMENDED_OPTIONS "compile by SQLite3 recommended options"          ON)
+option(SQLITE_ENABLE_DBSTAT_VTAB    "enables dbstat virtual table"                    OFF)
+option(SQLITE_ENABLE_FTS3           "enables full text searches version 3"            OFF)
+option(SQLITE_ENABLE_FTS4           "enables full text searches version 3 & 4"        OFF)
+option(SQLITE_ENABLE_FTS5           "enables full text searches version 5"            OFF)
+option(SQLITE_ENABLE_GEOPOLY        "enables Geopoly extention"                       OFF)
+option(SQLITE_ENABLE_ICU            "enables international components for unicode"    OFF)
+option(SQLITE_ENABLE_JSON1          "enables JSON SQL functions"                      ON)
+option(SQLITE_ENABLE_MATH_FUNCTIONS "enables the built-in SQL math functions"         ON)
+option(SQLITE_ENABLE_RBU            "enables resumable bulk update extension"         OFF)
+option(SQLITE_ENABLE_RTREE          "enables R*TRee index extension"                  OFF)
+option(SQLITE_ENABLE_STAT4          "enhances query planner under certain situations" OFF)
+option(SQLITE_USE_URI               "enables the default URI filename processing"     OFF)
+option(SQLITE_RECOMMENDED_OPTIONS   "compile by SQLite3 recommended options"          ON)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Release or Debug?" FORCE)
@@ -44,6 +45,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC # inject user's options
         $<$<BOOL:${SQLITE_ENABLE_GEOPOLY}>:SQLITE_ENABLE_GEOPOLY>
         $<$<BOOL:${SQLITE_ENABLE_ICU}>:SQLITE_ENABLE_ICU>
         $<$<BOOL:${SQLITE_ENABLE_JSON1}>:SQLITE_ENABLE_JSON1>
+        $<$<BOOL:${SQLITE_ENABLE_MATH_FUNCTIONS}>:SQLITE_ENABLE_MATH_FUNCTIONS>
         $<$<BOOL:${SQLITE_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
         $<$<BOOL:${SQLITE_ENABLE_RTREE}>:SQLITE_ENABLE_RTREE>
         $<$<BOOL:${SQLITE_ENABLE_STAT4}>:SQLITE_ENABLE_STAT4>
