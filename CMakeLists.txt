@@ -28,6 +28,12 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Release or Debug?" FORCE)
 endif()
 
+if(SQLITE_ENABLE_COLUMN_METADATA AND SQLITE_OMIT_DECLTYPE)
+    message(FATAL_ERROR "please unset the SQLITE_OMIT_DECLTYPE if you want to\
+    compile with SQLITE_ENABLE_COLUMN_METADATA,\
+    compiling with both options ON, is not recommended.")
+endif()
+
 #------------------------------------------------------------------------------
 
 # SQLite3 as static library:
