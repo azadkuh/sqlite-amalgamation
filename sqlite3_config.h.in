@@ -14,12 +14,12 @@
 #cmakedefine SQLITE_ENABLE_FTS5
 #cmakedefine SQLITE_ENABLE_GEOPOLY
 #cmakedefine SQLITE_ENABLE_ICU
-#cmakedefine SQLITE_ENABLE_JSON1
 #cmakedefine SQLITE_ENABLE_MATH_FUNCTIONS
 #cmakedefine SQLITE_ENABLE_RBU
 #cmakedefine SQLITE_ENABLE_RTREE
 #cmakedefine SQLITE_ENABLE_STAT4
 #cmakedefine SQLITE_OMIT_DECLTYPE
+#cmakedefine SQLITE_OMIT_JSON
 #cmakedefine SQLITE_USE_URI
 
 #cmakedefine SQLITE_RECOMMENDED_OPTIONS

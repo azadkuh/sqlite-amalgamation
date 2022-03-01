@@ -64,12 +64,12 @@ following cmake build options control some of those compile options:
 | `SQLITE_ENABLE_FTS5`            | off     |
 | `SQLITE_ENABLE_GEOPOLY`         | off     |
 | `SQLITE_ENABLE_ICU`             | off     |
-| `SQLITE_ENABLE_JSON1`           | on      |
 | `SQLITE_ENABLE_MATH_FUNCTIONS`  | on      |
 | `SQLITE_ENABLE_RBU`             | off     |
 | `SQLITE_ENABLE_RTREE`           | off     |
 | `SQLITE_ENABLE_STAT4`           | off     |
 | `SQLITE_OMIT_DECLTYPE`          | on      |
+| `SQLITE_OMIT_JSON`              | off     |
 | `SQLITE_USE_URI`                | off     |
 
 
