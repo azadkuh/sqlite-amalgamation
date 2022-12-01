@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(sqlite3
 	VERSION   3.40.0
 	LANGUAGES C
-	)
+)
 
 include(GNUInstallDirs)
 
@@ -34,9 +34,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(SQLITE_ENABLE_COLUMN_METADATA AND SQLITE_OMIT_DECLTYPE)
-	message(FATAL_ERROR "please unset the SQLITE_OMIT_DECLTYPE if you want to\
-	compile with SQLITE_ENABLE_COLUMN_METADATA,\
-	compiling with both options ON, is not recommended.")
+	message(FATAL_ERROR "please unset the SQLITE_OMIT_DECLTYPE if you want to compile with SQLITE_ENABLE_COLUMN_METADATA, compiling with both options ON, is not recommended.")
 endif()
 
 #------------------------------------------------------------------------------
@@ -47,29 +45,29 @@ if(BUILD_SHARED_LIBS)
 	message(STATUS ">> shared library ${RUNTIME_NAME}.dll")
 	add_library(${PROJECT_NAME} SHARED sqlite3.c)
 	set_target_properties(${PROJECT_NAME} PROPERTIES
-		OUTPUT_NAME   ${RUNTIME_NAME}
-		PDB_NAME      ${RUNTIME_NAME}
-		PUBLIC_HEADER sqlite3.h
+		OUTPUT_NAME	${RUNTIME_NAME}
+		PDB_NAME	${RUNTIME_NAME}
+		PUBLIC_HEADER	sqlite3.h
 	)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSQLITE_API=__declspec(dllexport)") # https://sqlite.org/forum/info/9bfd09f4772035e7
 	install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
-		ARCHIVE	   DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		RUNTIME	   DESTINATION ${CMAKE_INSTALL_BINDIR}
-		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+		ARCHIVE		DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME		DESTINATION ${CMAKE_INSTALL_BINDIR}
+		PUBLIC_HEADER	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
-	install(FILES ${CMAKE_BINARY_DIR}/${RUNTIME_NAME}.pdb DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL
-	)
+	install(FILES ${CMAKE_BINARY_DIR}/${RUNTIME_NAME}.pdb DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL)
 else()
 	message(STATUS ">> static library ${PROJECT_NAME}.lib")
 	add_library(${PROJECT_NAME} STATIC sqlite3.c)
 	set_target_properties(${PROJECT_NAME} PROPERTIES
-		OUTPUT_NAME   ${PROJECT_NAME}
-		PUBLIC_HEADER sqlite3.h
+		OUTPUT_NAME	${PROJECT_NAME}
+		PDB_NAME	${PROJECT_NAME}
+		PUBLIC_HEADER	sqlite3.h
 	)
 	install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
-		ARCHIVE	   DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		LIBRARY	   DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+		ARCHIVE		   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		LIBRARY		   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		PUBLIC_HEADER	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
 	install(FILES ${CMAKE_BINARY_DIR}/CMakeFiles/sqlite3.dir/${PROJECT_NAME}.pdb DESTINATION ${CMAKE_INSTALL_LIBDIR} OPTIONAL)
 endif()
@@ -119,7 +117,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC # inject user's options
 			SQLITE_USE_ALLOCA
 		>
 	>
-	)
+)
 # platform/compiler specific settings
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 	find_package(Threads REQUIRED)
@@ -131,7 +129,7 @@ elseif(WIN32 AND ${CMAKE_SIZEOF_VOID_P} LESS 8) # this is a 32bit windows
 			$<BUILD_INTERFACE:
 				-DSQLITE_OS_WINRT=0 -D_WIN32_WINNT=0x0502 -DWINVER=0x0502
 			>
-			)
+		)
 	endif()
 endif()
 
@@ -141,7 +139,7 @@ configure_file(sqlite3_config.h.in ${CMAKE_BINARY_DIR}/sqlite3_config.h)
 install(EXPORT  ${PROJECT_NAME}Config
 	NAMESPACE   SQLite::
 	DESTINATION cmake
-	)
+)
 install(FILES
 	${CMAKE_BINARY_DIR}/sqlite3_config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
@@ -158,7 +156,7 @@ if(BUILD_SHELL)
 		if(CMAKE_BUILD_TYPE STREQUAL Release)
 			add_custom_command(TARGET shell_app POST_BUILD
 				COMMAND ${CMAKE_STRIP} sqlite3
-				)
+			)
 		endif()
 	elseif(MSVC)
 		option(BUILD_SHELL_STATIC "build shell by static c/c++ runtime" ON)
@@ -173,5 +171,5 @@ if(BUILD_SHELL)
 	endif()
 	install(TARGETS shell_app
 		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-		)
+	)
 endif()
