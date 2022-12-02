@@ -41,12 +41,12 @@ endif()
 
 # SQLite3 as library:
 if(BUILD_SHARED_LIBS)
-	set(RUNTIME_NAME "libsqlite3")
-	message(STATUS ">> shared library ${RUNTIME_NAME}.dll")
+	set(SHARED_NAME "libsqlite3")
+	message(STATUS ">> shared library ${SHARED_NAME}.dll")
 	add_library(${PROJECT_NAME} SHARED sqlite3.c)
 	set_target_properties(${PROJECT_NAME} PROPERTIES
-		OUTPUT_NAME	${RUNTIME_NAME}
-		PDB_NAME	${RUNTIME_NAME}
+		OUTPUT_NAME	${SHARED_NAME}
+		PDB_NAME	${SHARED_NAME}
 		PUBLIC_HEADER	sqlite3.h
 	)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSQLITE_API=__declspec(dllexport)") # https://sqlite.org/forum/info/9bfd09f4772035e7
@@ -55,7 +55,7 @@ if(BUILD_SHARED_LIBS)
 		RUNTIME		DESTINATION ${CMAKE_INSTALL_BINDIR}
 		PUBLIC_HEADER	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	)
-	install(FILES ${CMAKE_BINARY_DIR}/${RUNTIME_NAME}.pdb DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL)
+	install(FILES ${CMAKE_BINARY_DIR}/${SHARED_NAME}.pdb DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL)
 else()
 	message(STATUS ">> static library ${PROJECT_NAME}.lib")
 	add_library(${PROJECT_NAME} STATIC sqlite3.c)
@@ -148,14 +148,15 @@ install(FILES
 # SQLite3 shell application:
 option(BUILD_SHELL "build SQLite3 shell application" OFF)
 if(BUILD_SHELL)
-	message(STATUS ">> executable sqlite3.exe")
+	set(EXE_NAME "sqlite3")
+	message(STATUS ">> executable ${EXE_NAME}.exe")
 	add_executable(shell_app shell.c)
-	set_target_properties(shell_app PROPERTIES OUTPUT_NAME sqlite3)
-	target_link_libraries(shell_app PRIVATE sqlite3)
+	set_target_properties(shell_app PROPERTIES OUTPUT_NAME ${EXE_NAME})
+	target_link_libraries(shell_app PRIVATE ${EXE_NAME})
 	if(UNIX)
 		if(CMAKE_BUILD_TYPE STREQUAL Release)
 			add_custom_command(TARGET shell_app POST_BUILD
-				COMMAND ${CMAKE_STRIP} sqlite3
+				COMMAND ${CMAKE_STRIP} ${EXE_NAME}
 			)
 		endif()
 	elseif(MSVC)
@@ -172,4 +173,5 @@ if(BUILD_SHELL)
 	install(TARGETS shell_app
 		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 	)
+	install(FILES ${CMAKE_BINARY_DIR}/${EXE_NAME}.pdb DESTINATION ${CMAKE_INSTALL_BINDIR} OPTIONAL)
 endif()
