@@ -140,9 +140,8 @@ install(EXPORT  ${PROJECT_NAME}Config
 	NAMESPACE   SQLite::
 	DESTINATION cmake
 )
-install(FILES
-	${CMAKE_BINARY_DIR}/sqlite3_config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+install(FILES ${CMAKE_BINARY_DIR}/sqlite3_config.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${PROJECT_SOURCE_DIR}/sqlite3ext.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/sqlite3/)
 
 #------------------------------------------------------------------------------
 # SQLite3 shell application:
