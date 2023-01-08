@@ -111,7 +111,9 @@ option(BUILD_SHELL "build SQLite3 shell application" OFF)
 if(BUILD_SHELL)
     add_executable(shell_app shell.c)
     set_target_properties(shell_app PROPERTIES OUTPUT_NAME sqlite3)
-    target_link_libraries(shell_app PRIVATE ${PROJECT_NAME})
+    target_link_libraries(shell_app PRIVATE ${PROJECT_NAME}
+        $<$<BOOL:${SQLITE_ENABLE_MATH_FUNCTIONS}>:m>
+        )
     if(UNIX)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
             add_custom_command(TARGET shell_app POST_BUILD
